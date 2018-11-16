@@ -242,7 +242,7 @@ ul li .PublishTime {
   width: 0;
   background-color: #f57e20;
   border-radius: 50px;
-  transition: 5s;
+  transition: 0.5s;
 }
 
 #NowLocation {
