@@ -17,6 +17,11 @@ body {
   margin: 0;
 }
 
+h4 {
+  font-size: 5rem;
+  text-align: center;
+}
+
 h1, h2 {
   text-align: center;
   color: white;
