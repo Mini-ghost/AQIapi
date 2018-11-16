@@ -256,20 +256,10 @@ ul li .PublishTime {
   text-align: center;
   z-index: 999;
 }
-@media (max-width: 768px) {
-  #NowLocation {
-    background-color: rgba(0, 128, 0, 0.5);
-  }
-}
 #NowLocation p.location {
   margin: 0;
   font-size: 12px;
   color: #222;
-}
-@media (max-width: 768px) {
-  #NowLocation p.location {
-    font-size: 1rem;
-  }
 }
 #NowLocation i {
   margin-right: 5px;
