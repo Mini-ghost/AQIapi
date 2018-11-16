@@ -44,11 +44,18 @@ h1, h2 {
   background-position: center;
   background-size: cover;
 }
+@media (max-width: 768px) {
+  .filter .bgc_img {
+    -webkit-filter: blur(10px);
+            filter: blur(10px);
+  }
+}
 
 #AQI .content {
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  padding: 10px;
 }
 
 .Time {
@@ -56,6 +63,11 @@ h1, h2 {
   font-weight: 700;
   font-size: 15px;
   text-align: center;
+}
+@media (max-width: 768px) {
+  .Time {
+    font-size: 12px;
+  }
 }
 .Time .Today, .Time .nowtime {
   display: inline;
@@ -116,7 +128,6 @@ h1, h2 {
 }
 
 ul {
-  width: 100%;
   max-width: 460px;
   list-style: none;
   margin: 0 auto;
@@ -230,6 +241,7 @@ ul li .PublishTime {
   height: 100%;
   width: 0;
   background-color: #f57e20;
+  border-radius: 50px;
   transition: 5s;
 }
 
@@ -238,7 +250,6 @@ ul li .PublishTime {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 38px;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 10px 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
