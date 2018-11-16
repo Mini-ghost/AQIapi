@@ -130,10 +130,10 @@ function GetLocation() {
   navigator.geolocation.getCurrentPosition(success, error);
 }
 
-function Width(){
-  $("h4").text(document.body.clientWidth)
-}
+// function Width(){
+//   $("h4").text(document.body.clientWidth)
+// }
 
 window.onload = GetLocation();
-window.onload = Width();
+// window.onload = Width();
 // window.onload($(".filter .bgc_img").addClass("FilterBlur"))

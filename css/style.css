@@ -49,7 +49,7 @@ h1, h2 {
   background-position: center;
   background-size: cover;
 }
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   .filter .bgc_img {
     -webkit-filter: blur(10px);
             filter: blur(10px);
@@ -75,7 +75,7 @@ h1, h2 {
   position: relative;
   padding: 20px 0;
 }
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   .content {
     flex-direction: column;
   }
@@ -90,7 +90,7 @@ h1, h2 {
 .CountyRadio {
   margin-right: 10px;
 }
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   .CountyRadio {
     max-width: 90%;
     min-width: 320px;
@@ -151,7 +151,7 @@ ul {
   padding: 0;
   margin: 0;
 }
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   ul {
     max-width: 90%;
     min-width: 90%;
