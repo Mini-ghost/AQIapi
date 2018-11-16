@@ -13,7 +13,7 @@ var AqiData = {
   OpenData : [],
   County : [],
   CountyRadio : [],
-  filter: "¥ş»OÆW",
+  filter: "å…¨è‡ºç£",
 }
 
 
@@ -30,7 +30,7 @@ var vm = new Vue({
       vm.CountyRadio = result  
     },
     ClickTaiwan: function(res){
-      this.filter = "¥ş»OÆW"
+      this.filter = "å…¨è‡ºç£"
       this.CountyRadio = this.OpenData
     }
   },
@@ -47,7 +47,7 @@ $.ajax({
     vm.OpenData = res.sort(function(a,b){
       return a.AQI - b.AQI
     }).reverse()
-    // °}¦CŞüÄò½Õ¾ã
+    // é™£åˆ—ç¨•çºŒèª¿æ•´
     
     vm.CountyRadio = res
       
@@ -59,7 +59,7 @@ $.ajax({
       }else{
       }
     }
-    // §ì¨ú©Ò¦³¿¤¥«¡A¦s¨ì«°¥«°}¦C
+    // æŠ“å–æ‰€æœ‰ç¸£å¸‚ï¼Œå­˜åˆ°åŸå¸‚é™£åˆ—
     vm.County.sort()
   } 
 });
@@ -82,8 +82,8 @@ $(function Today(){
   var mom = new Date().getMonth()+1 // 0-11 
   var date = new Date().getDate()
   var day = new Date().getDay()
-  var dayArray = ["¤é","¤@","¤G","¤T","¥|","¤­","¤»"]
-  $(".Today").text(yer  + " ¦~ " + mom  + " ¤ë " + date +" ¤é ")
+  var dayArray = ["æ—¥","ä¸€","äºŒ","ä¸‰","å››","äº”","å…­"]
+  $(".Today").text(yer  + " å¹´ " + mom  + " æœˆ " + date +" æ—¥ ")
 })
 
 
@@ -98,7 +98,7 @@ $(window).scroll(function(){
 })
 
 
-// ¨ú±o¦a²z¸ê°T
+// å–å¾—åœ°ç†è³‡è¨Š
 function GetLocation(){
   var ShowLocation = document.getElementById("NowLocation");
 
@@ -108,15 +108,15 @@ function GetLocation(){
     
     // console.log(latitude ,longitude)
 
-    ShowLocation.innerHTML = "<p class='location'><i class='fas fa-map-marker-alt'></i>§A¥Ø«e¦b¡G<b>½n«×¡]Latitude¡^</b>¡G" +latitude.toFixed(6)+"¡@<b>¸g«×¡]Longitude¡^</b>¡G"+longitude.toFixed(6)+"</p>";
+    ShowLocation.innerHTML = "<p class='location'><i class='fas fa-map-marker-alt'></i>ä½ ç›®å‰åœ¨ï¼š<b>ç·¯åº¦ï¼ˆLatitudeï¼‰</b>ï¼š" +latitude.toFixed(6)+"ã€€<b>ç¶“åº¦ï¼ˆLongitudeï¼‰</b>ï¼š"+longitude.toFixed(6)+"</p>";
     
   }
 
   function error(){
-    ShowLocation.innerHTML = "Error¡IµLªk¨ú±o±zªº©w¦ì¸ê°T";
+    ShowLocation.innerHTML = "Errorï¼ç„¡æ³•å–å¾—æ‚¨çš„å®šä½è³‡è¨Š";
   }
 
-  ShowLocation.innerHTML = "Locating¡K";
+  ShowLocation.innerHTML = "Locatingâ€¦";
 
   navigator.geolocation.getCurrentPosition(success, error);
 };
