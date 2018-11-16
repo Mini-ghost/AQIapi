@@ -1,0 +1,106 @@
+
+<div id="AQI">
+  <header class="header">
+    <h2>Air Quality Index</h2>
+    <h1>空氣品質指標(AQI)- 政府資料開放平台</h1>
+    <div class="Time">載入時間：
+      <div class="Today"></div>
+      <div class="nowtime"></div>
+    </div>
+  </header>
+  <main class="content">
+    <div class="CountyRadio">
+      <h3>區域選擇<span>（{{filter}}共有 {{CountyRadio.length}} 個監測站）</span></h3>
+      <div class="button-Box">
+        <div class="button">
+          <input type="radio" name="CountyRadio" id="CountyData" checked="checked"/>
+          <label for="CountyData" name="CountyRadio" @click="ClickTaiwan()">全臺灣</label>
+        </div>
+        <div class="button" v-for="CountyData in AqiData.County">
+          <input type="radio" name="CountyRadio" :id="CountyData"/>
+          <label :for="CountyData" name="CountyRadio" @click="ClickCountyRadio(CountyData)">{{CountyData}}</label>
+        </div>
+      </div>
+    </div>
+    <ul>
+      <li v-for="OpenData in AqiData.CountyRadio">
+        <div class="District">
+          <div class="County">{{OpenData.County}}</div>
+          <div class="SiteName">{{OpenData.SiteName}}</div>
+        </div>
+        <div class="AQIBox">
+          <div class="AQI" :class="{Good: OpenData.AQI &gt;= 0 ,Moderate: OpenData.AQI &gt;= 51,UnhealthyForSensitiveGroups: OpenData.AQI &gt;= 101, Unhealthy: OpenData.AQI &gt;= 151 , VeryUnhealthy: OpenData.AQI &gt;= 201 , Hazardous: OpenData.AQI &gt;= 301}">{{OpenData.AQI}}</div>
+          <div class="Status">{{OpenData.Status}}</div>
+        </div>
+        <div class="DataBox">
+          <div class="Item PM25">
+            <div class="DataName">PM2.5
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData['PM2.5']/AqiMax['PM2.5']*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData["PM2.5"]}}
+              <div class="unit">μg/m<sup>3</sup></div>
+            </div>
+          </div>
+          <div class="Item PM10">
+            <div class="DataName">PM10
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData.PM10/AqiMax.PM10*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData.PM10}}
+              <div class="unit">μg/m<sup>3</sup></div>
+            </div>
+          </div>
+          <div class="Item SO2">
+            <div class="DataName">SO<sub>2</sub>
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData.SO2/AqiMax.SO2*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData.SO2}}
+              <div class="unit">ppb</div>
+            </div>
+          </div>
+          <div class="Item CO">
+            <div class="DataName">CO 
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData.CO/AqiMax.CO*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData.CO}}
+              <div class="unit">ppm</div>
+            </div>
+          </div>
+          <div class="Item O3">
+            <div class="DataName">O<sub>3</sub>
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData.O3/AqiMax.O3*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData.O3}}
+              <div class="unit">ppb</div>
+            </div>
+          </div>
+          <div class="Item NO">
+            <div class="DataName">NO<sub>2 </sub>
+              <div class="bar">
+                <div class="bar-value" :style="'width:'+ OpenData.NO2/AqiMax.NO2*100 +'%'"></div>
+              </div>
+            </div>
+            <div class="NumericalValue">{{OpenData.NO2}}
+              <div class="unit">ppb</div>
+            </div>
+          </div>
+        </div>
+        <div class="PublishTime">資料更新時間：{{OpenData.PublishTime}}</div>
+      </li>
+    </ul>
+  </main>
+  <footer id="NowLocation"></footer>
+</div>
+<!-- 背景-->
+<div class="filter">
+  <div class="bgc_img"></div>
+</div>
