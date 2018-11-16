@@ -114,9 +114,9 @@ function GetLocation() {
     // console.log(latitude ,longitude)
 
     ShowLocation.innerHTML =
-      "<p class='location'><i class='fas fa-map-marker-alt'></i>你目前在：<b>緯度（Latitude）</b>：" +
+      "<p class='location'><i class='fas fa-map-marker-alt'></i>你目前在<b>緯度（Latitude）</b>：" +
       latitude.toFixed(6) +
-      "　<b>經度（Longitude）</b>：" +
+      "　<b>經度（Longitude）</b>" +
       longitude.toFixed(6) +
       "</p>";
   }
