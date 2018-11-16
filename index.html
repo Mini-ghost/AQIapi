@@ -28,15 +28,17 @@
   </header>
   <main class="content">
     <div class="CountyRadio">
-      <h3>區域選擇<span>（{{filter}}共有 {{CountyRadio.length}} 個監測站）</span></h3>
-      <div class="button-Box">
-        <div class="button">
-          <input type="radio" name="CountyRadio" id="CountyData" checked="checked"/>
-          <label for="CountyData" name="CountyRadio" @click="ClickTaiwan()">全臺灣</label>
-        </div>
-        <div class="button" v-for="CountyData in AqiData.County">
-          <input type="radio" name="CountyRadio" :id="CountyData"/>
-          <label :for="CountyData" name="CountyRadio" @click="ClickCountyRadio(CountyData)">{{CountyData}}</label>
+      <div class="RadioBox">
+        <h3>區域選擇<span>（{{filter}}共有 {{CountyRadio.length}} 個監測站）</span></h3>
+        <div class="button-Box">
+          <div class="button">
+            <input type="radio" name="CountyRadio" id="CountyData" checked="checked"/>
+            <label for="CountyData" name="CountyRadio" @click="ClickTaiwan()">全臺灣</label>
+          </div>
+          <div class="button" v-for="CountyData in AqiData.County">
+            <input type="radio" name="CountyRadio" :id="CountyData"/>
+            <label :for="CountyData" name="CountyRadio" @click="ClickCountyRadio(CountyData)">{{CountyData}}</label>
+          </div>
         </div>
       </div>
     </div>
