@@ -84,7 +84,7 @@ h1, h2 {
   flex: 0 1 30%;
 }
 .content ul {
-  flex: 0 1 70%;
+  flex: 1 1 70%;
 }
 
 .CountyRadio {
@@ -98,6 +98,9 @@ h1, h2 {
   }
 }
 .CountyRadio .RadioBox {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 20px;
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 20px;
