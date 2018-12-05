@@ -1,5 +1,5 @@
 var AqiApi = "https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc";
-// https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc
+// var AqiApi = "http://opendata2.epa.gov.tw/AQI.json";
 
 var aqiMax = {
   "PM2.5": 350.4,
@@ -52,7 +52,7 @@ $.ajax({
   url: AqiApi,
   method: "get",
   dataType: "jsonp",
-  cache: false,
+  // cache: false,
   success: function(res) {
     // 陣列順序調整
     vm.OpenData = res

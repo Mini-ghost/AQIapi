@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="zh-tw" >
 
 <head>
   <meta charset="UTF-8">
@@ -25,7 +25,7 @@
 <div id="AQI">
   <header class="header">
     <h2>Air Quality Index</h2>
-    <h1>空氣品質指標（AQI）</h1>
+    <h1>臺灣空氣品質指標（AQI）</h1>
     <div class="Time">載入時間：
       <div class="Today"></div>
       <div class="nowtime"></div>
@@ -48,20 +48,20 @@
       </div>
     </div>
     <ul>
-      <li v-for="OpenData in AqiData.CountyRadio">
+      <li v-for="(OpenData,index) in AqiData.CountyRadio" v-if="index&lt;12">
         <div class="District">
           <div class="County">{{OpenData.County}}</div>
           <div class="SiteName">{{OpenData.SiteName}}</div>
         </div>
         <div class="AQIBox">
-          <div class="AQI" :class="{Good: OpenData.AQI &gt;= 0 ,Moderate: OpenData.AQI &gt;= 51,UnhealthyForSensitiveGroups: OpenData.AQI &gt;= 101, Unhealthy: OpenData.AQI &gt;= 151 , VeryUnhealthy: OpenData.AQI &gt;= 201 , Hazardous: OpenData.AQI &gt;= 301}">{{OpenData.AQI}}</div>
+          <div class="AQI" :class="OpenData.aqiClass">{{OpenData.AQI}}</div>
           <div class="Status">{{OpenData.Status}}</div>
         </div>
         <div class="DataBox">
           <div class="Item PM25">
             <div class="DataName">PM2.5
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData['PM2.5']/AqiMax['PM2.5']*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData['PM2.5']/aqiMax['PM2.5']*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData["PM2.5"]}}
@@ -71,7 +71,7 @@
           <div class="Item PM10">
             <div class="DataName">PM10
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData.PM10/AqiMax.PM10*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData.PM10/aqiMax.PM10*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData.PM10}}
@@ -81,7 +81,7 @@
           <div class="Item SO2">
             <div class="DataName">SO<sub>2</sub>
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData.SO2/AqiMax.SO2*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData.SO2/aqiMax.SO2*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData.SO2}}
@@ -91,7 +91,7 @@
           <div class="Item CO">
             <div class="DataName">CO 
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData.CO/AqiMax.CO*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData.CO/aqiMax.CO*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData.CO}}
@@ -101,7 +101,7 @@
           <div class="Item O3">
             <div class="DataName">O<sub>3</sub>
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData.O3/AqiMax.O3*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData.O3/aqiMax.O3*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData.O3}}
@@ -111,7 +111,7 @@
           <div class="Item NO">
             <div class="DataName">NO<sub>2 </sub>
               <div class="bar">
-                <div class="bar-value" :style="'width:'+ OpenData.NO2/AqiMax.NO2*100 +'%'"></div>
+                <div class="bar-value" :style="'width:'+ OpenData.NO2/aqiMax.NO2*100 +'%'"></div>
               </div>
             </div>
             <div class="NumericalValue">{{OpenData.NO2}}
@@ -130,7 +130,6 @@
 
 <div class="filter">
   <div class="bgc_img"></div>
-
 </div>
 
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
