@@ -1,6 +1,7 @@
-var AqiApi = "https://opendata.epa.gov.tw/ws/Data/AQI/?$format=json";
+var AqiApi = "https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc";
 
-var AqiMax = {
+
+var aqiMax = {
   "PM2.5": 350.4,
   PM10: 504,
   SO2: 804,
@@ -9,10 +10,20 @@ var AqiMax = {
   NO2: 1649
 };
 
+var aqiRange = {
+  Good: 51,
+  Moderate: 101,
+  UnhealthyForSensitiveGroups: 151,
+  Unhealthy: 201,
+  VeryUnhealthy: 300,
+  Hazardous: 500
+}
+
 var AqiData = {
   OpenData: [],
   County: [],
   CountyRadio: [],
+  position: [],
   filter: "全臺灣"
 };
 
@@ -33,34 +44,44 @@ var vm = new Vue({
       this.CountyRadio = this.OpenData;
     }
   },
-  computed: {}
 });
+
+GetLocation()
 
 $.ajax({
   url: AqiApi,
   method: "get",
   dataType: "jsonp",
-  cache: false,
   success: function(res) {
-    vm.OpenData = res
-      .sort(function(a, b) {
-        return a.AQI - b.AQI;
-      })
-      .reverse();
     // 陣列順序調整
-
-    vm.CountyRadio = res;
-
-    var j = 0;
-    for (var i = 0; i < res.length; i++) {
-      if (vm.County.indexOf(res[i].County) === -1) {
-        vm.County[j] = res[i].County;
-        j++;
-      } else {
-      }
-    }
+    vm.OpenData = res
+    vm.OpenData.map((obj)=>{
+      
+      var x, y, distance
+      x = vm.position[0] - obj.Longitude
+      y = vm.position[1] - obj.Latitude
+      distance = Math.sqrt(Math.pow(x,2) + Math.pow(y,2))
+      obj.nearest = distance
+      
+      if(obj.AQI < aqiRange.Good){obj.aqiClass = "Good"}
+      else if(obj.AQI < aqiRange.Moderate){obj.aqiClass = "Moderate"}
+      else if(obj.AQI < aqiRange.Unhealthy){obj.aqiClass = "Unhealthy"}
+      else if(obj.AQI < aqiRange.UnhealthyForSensitiveGroups){obj.aqiClass = "UnhealthyForSensitiveGroups"}
+      else if(obj.AQI < aqiRange.VeryUnhealthy){obj.aqiClass = "VeryUnhealthy"}
+      else {obj.aqiClass = "Hazardous"}
+      
+    })
+    
+    vm.OpenData.sort(function(a, b){return a.nearest - b.nearest;})
+    
     // 抓取所有縣市，存到城市陣列
-    vm.County.sort();
+    vm.OpenData.forEach((obj)=>{
+      if(vm.County.indexOf(obj.County) == -1){
+        vm.County.push(obj.County)
+      }
+    })
+    
+    vm.CountyRadio = res;
   }
 });
 
@@ -94,15 +115,6 @@ $(function Today() {
   $(".Today").text(yer + " 年 " + mom + " 月 " + date + " 日 ");
 });
 
-// $(window).scroll(function(){
-//   console.log($("h1").scrollTop())
-//   if($("body").scrollTop()==0){
-//     $(".filter .bgc_img").addClass("FilterBlur")
-//   }else{
-//     $(".filter .bgc_img").removeClass("FilterBlur")
-//   }
-// })
-
 // 取得地理資訊
 function GetLocation() {
   var ShowLocation = document.getElementById("NowLocation");
@@ -110,13 +122,14 @@ function GetLocation() {
   function success(position) {
     var latitude = position.coords.latitude;
     var longitude = position.coords.longitude;
+    
+    vm.position = [longitude,latitude]
 
-    // console.log(latitude ,longitude)
 
     ShowLocation.innerHTML =
-      "<p class='location'><i class='fas fa-map-marker-alt'></i>你目前<b>緯度（Latitude）</b>" +
+      "<p class='location'><i class='fas fa-map-marker-alt'></i>你目前<b>緯度</b>：" +
       latitude.toFixed(6) +
-      "　<b>經度（Longitude）</b>" +
+      "　<b>經度</b>：" +
       longitude.toFixed(6) +
       "</p>";
   }
@@ -129,11 +142,3 @@ function GetLocation() {
 
   navigator.geolocation.getCurrentPosition(success, error);
 }
-
-// function Width(){
-//   $("h4").text(document.body.clientWidth)
-// }
-
-window.onload = GetLocation();
-// window.onload = Width();
-// window.onload($(".filter .bgc_img").addClass("FilterBlur"))
