@@ -150,6 +150,9 @@ h1, h2 {
       width: calc(33.33% - 4px);
       height: 36px;
       margin: 2px; }
+      @media (max-width: 768px) {
+        .CountyRadio .button-Box .button {
+          height: 40px; } }
     .CountyRadio .button-Box input[name="CountyRadio"] {
       display: none; }
       .CountyRadio .button-Box input[name="CountyRadio"]:checked + label[name="CountyRadio"] {
