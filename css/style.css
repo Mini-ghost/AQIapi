@@ -228,6 +228,8 @@ ul.AQIBox {
         color: #7e2b7d; }
       ul.AQIBox > li.AQIcard .AQINum .AQI.Hazardous {
         color: #480d27; }
+      ul.AQIBox > li.AQIcard .AQINum .AQI.stop {
+        color: #878787; }
       ul.AQIBox > li.AQIcard .AQINum .AQI:before {
         position: absolute;
         content: "";
