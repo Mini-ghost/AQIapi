@@ -1,7 +1,8 @@
 (function($,Vue){
-  let AqiApi = "https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc";
 
-  let aqiRange = {
+  const AqiApi = "https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc";
+
+  const aqiRange = {
     Good: 51,
     Moderate: 101,
     UnhealthyForSensitiveGroups: 151,
@@ -137,6 +138,9 @@
       totalPage(){
         return  Math.ceil(this.filterData.length/this.dataPrePage)
       }
+    },
+    beforeDestory(){
+      clearInterval(timer)
     }
   });
 
