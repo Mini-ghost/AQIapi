@@ -1,5 +1,5 @@
 
-; (function () {
+; (function ($, Vue, d3) {
 
     Vue.component('quality', {
         template: '#quality',
@@ -194,4 +194,4 @@
         }
     })
 
-})()
+})($, Vue, d3)
