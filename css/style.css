@@ -406,6 +406,7 @@ main {
 }
 
 .quality-bar__percentage {
+  width: 0;
   height: 100%;
   background-color: rgba(255, 165, 0, 0.5);
   -webkit-transition: 0.5s 0.5s, background 0.5s;
