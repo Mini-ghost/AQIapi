@@ -1,148 +1,197 @@
-(function($,Vue){
 
-  const AqiApi = "https://json2jsonp.com/?url=http://opendata2.epa.gov.tw/AQI.json&callback=cbfunc";
+; (function () {
 
-  const aqiRange = {
-    Good: 51,
-    Moderate: 101,
-    UnhealthyForSensitiveGroups: 151,
-    Unhealthy: 201,
-    VeryUnhealthy: 300,
-    Hazardous: 500
-  }
+    Vue.component('quality', {
+        template: '#quality',
+        props: ['airData']
 
-  const vm = new Vue({
-    el: "#app",
-    data: {
-      OpenData: [],
-      County: [],
-      CountyRadio: [],
-      position: [],
-      filter: "全臺灣",
-      aqiMax: {
-        "PM2.5": 350.4,
-        PM10: 504,
-        SO2: 804,
-        CO: 40.4,
-        O3: 504,
-        NO2: 1649
-      },
-      dataPrePage: 6,
-      pageNum: 1,
-      today: '',
-      time: '',
-    },
 
-    async mounted() {
-      this.getToday()
-      timer = setInterval(this.updateTime,1000)
+    })
 
-      this.position = await this.getLocation()
-      $.ajax({
-        url: AqiApi,
-        method: "get",
-        dataType: "jsonp",
-        success: this.successHandler
-      })
-    },
+  
+    var vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                county: new Array,
+                ajaxData: null,
+                selectCounty: '臺中市',
+                selectClass: 'taiwan-county--active',
+                ready: false,
+                navType: false,
+                bodyType: false,
+                windowType: true,
+                loadingTime: null,
+            }
 
-    methods: {
-      successHandler(res){
-        this.OpenData = res
-        this.OpenData.map((obj) => {
+        },
+        mounted() {
+            var googleApp = 'https://script.google.com/macros/s/AKfycbxe3Ba-MiNT5T_mHhW-mf5IixAk2xScNjX74766jThzC3sMAc0/exec?url=',
+                airApi = `${googleApp}http://opendata2.epa.gov.tw/AQI.json`
+            var svg = d3.select('.taiwan-content').append('svg').attr('class', 'taiwan-svg').attr('viewBox', '0 0 650 650')
 
-          let x, y, distance
-          x = this.position[0] - obj.Longitude
-          y = this.position[1] - obj.Latitude
-          distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2))
-          obj.nearest = distance
+            d3.json('database/taiwan.json', this.drowSVGHandler);
+            
+            $.ajax({
+                url: airApi,
+                method: 'get',
+                success: this.ajaxSuccessHandler
+            })
 
-          // AQIBox 上的 Class
-          if(obj.AQI === '') {obj.aqiClass = 'stop'}
-          else if (obj.AQI < aqiRange.Good) { obj.aqiClass = 'Good' }
-          else if (obj.AQI < aqiRange.Moderate) { obj.aqiClass = 'Moderate' }
-          else if (obj.AQI < aqiRange.Unhealthy) { obj.aqiClass = 'Unhealthy' }
-          else if (obj.AQI < aqiRange.UnhealthyForSensitiveGroups) { obj.aqiClass = 'UnhealthyForSensitiveGroups' }
-          else if (obj.AQI < aqiRange.VeryUnhealthy) { obj.aqiClass = 'VeryUnhealthy' }
-          else { obj.aqiClass = 'Hazardous' }
-        })
+            window.addEventListener('resize', this.resizeHandler)
+            this.resizeHandler()
+        },
+        methods: {
+            // 空氣品質 API 載入
+            ajaxSuccessHandler(res) {
+                this.ajaxData = res.map(obj => ({
+                    County: obj['County'],
+                    SiteName: obj['SiteName'],
+                    AQI: obj['AQI'],
+                    AQIStatus: this.statusHandler(obj['AQI']),
+                    Index: [
+                        { name: '細懸浮微粒', key: 'PM25', chemical: 'PM2.5', unit: 'μg/m³', value: obj['PM2.5'], max: 350.4},
+                        { name: '懸浮微粒', key: 'PM10', chemical: 'PM10', unit: 'μg/m³', value: obj['PM10'], max: 504},
+                        { name: '二氧化硫', key: 'SO2', chemical: 'SO<sub>2</sub>', unit: 'ppb', value: obj['SO2'], max: 804},
+                        { name: '一氧化碳', key: 'CO', chemical: 'CO', unit: 'ppm', value: obj['CO'], max: 40.4},
+                        { name: '臭氧', key: 'O3', chemical: 'O<sub>3</sub>', unit: 'ppb', value: obj['O3'], max: 504},
+                        { name: '二氧化氮', key: 'NO2', chemical: 'NO<sub>2</sub>', unit: 'ppb', value: obj['NO2'], max: 1649}
+                    ],
+                }))
+                this.loadingTime = new Date
+                this.ready = true
+            },
+            statusHandler(data) {
+                var status = new Object
+                if (!data) {
+                    status = { text: '設備維護', class: '--null' }
+                    return status
+                }
+                if (data <= 50) status = { text: '良好', class: '--good' } 
+                else if (data > 50 && data <= 100) status = { text: '普通', class: '--moderate' }
+                else if (data > 100 && data <= 150) status = { text: '對敏感族群不健康', class: '--unhealthyForSensitiveGroups' }
+                else if (data > 150 && data <= 200) status = { text: '對所有族群不健康', class: '--unhealthy' }
+                else if (data > 200 && data <= 300) status = { text: '非常不健康', class: '--veryUnhealthy' }
+                else  status = { text: '危害', class: '--hazardous' }
+                return status
+            },
+            // 台灣地圖繪製
+            drowSVGHandler(data) {
+                var features = topojson.feature(data, data.objects['County_MOI_1060525']).features,
+                    path = d3.geo.path().projection(d3.geo.mercator().center([121, 24]).scale(9000)),
 
-        this.OpenData.sort(function (a, b) { return a.nearest - b.nearest; })
+                    // 繪製 svg
+                    svhPath = d3.select('svg')
+                        .selectAll('path')
+                        .data(features)
+                        .enter()
+                        .append('path')
+                        .attr('class', 'taiwan-county')    
+                        .attr('data-county', features.properties)
+                        .attr('d', path);
+                
+                // 傳一份資料到 Vue 裡面
+                features.forEach(obj => { this.county.push(obj.properties) });
 
-        // 抓取所有縣市，存到城市陣列
-        this.OpenData.forEach((obj) => {
-          if (this.County.indexOf(obj.County) == -1) {
-            this.County.push(obj.County)
-          }
-        })
+                // 每個路徑給名子
+                svhPath[0].forEach((obj, i) => {
+                    var arrayItem =  this.county[i]
+                    obj.dataset.countyCh = arrayItem.COUNTYNAME
+                    obj.dataset.countyEn = arrayItem.COUNTYENG 
+                    if(arrayItem.COUNTYNAME === this.selectCounty) obj.classList.add(this.selectClass)
+                })
+            },
+            // 地圖點選
+            countyClickHandler(e) {
+                var target = e.target
+                if (target.nodeName === 'path') {
+                    var vmThis = this,
+                        data = target.dataset.countyCh,  
+                        $group = $('.quality-group')
+                    var targetSiblings = Array.prototype.filter.call(target.parentNode.children, (child) => {
+                        return child !== target
+                    })
+                    targetSiblings.forEach(obj => {
+                        if (obj.classList.contains(this.selectClass)) {
+                            obj.classList.remove(this.selectClass)
+                            return
+                        }
+                    })
+                    target.classList.add(this.selectClass)
+                    this.changeSelectHandler(data)
+                }
+            },
+            radioClickHandler(data) {
+                var prevSelect, nextSelect
+                if (this.selectCounty === data) return
+                prevSelect = document.querySelector(`.taiwan-county[class*=${this.selectClass}]`)
+                nextSelect = document.querySelector(`.taiwan-county[data-county-ch="${data}"]`)
 
-        // 把資料丟進 vue 裡面
-        this.CountyRadio = res;
-      },
-      ClickCountyRadio(res){
-        this.filter = res
-        this.pageNum = 1
-        this.goTop()
-      },
-      pageSelect(res){
-        this.pageNum = res
-        this.goTop()
-      },
-      goTop(){
-        $("html,body").animate({
-          scrollTop: $(".AQIBox").offset().top -20
-        },600);
-      },
-      getLocation(){
-        return new Promise((resolve) => {
-          navigator.geolocation.getCurrentPosition((position) => {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-            resolve([longitude, latitude])
-          }, ()=>{resolve([0,0])});
-        })
-      },
-      getToday(){
-        let yer = new Date().getFullYear()
-        let mom = new Date().getMonth() + 1 // 0-11
-        let date = new Date().getDate()
-        let day = new Date().getDay()
-        let dayArray = ['日', '一', '二', '三', '四', '五', '六']
-        this.today = `載入時間：${yer} 年 ${mom} 月 ${date} 日 星期${dayArray[day]}`
-      },
-      updateTime(){
-        let hrs = new Date().getHours();
-        let min = new Date().getMinutes();
-        let sec = new Date().getSeconds();
-      
-        if (hrs == 0) {hrs += 12;}
-        if (hrs < 10) {hrs = "0" + hrs;}
-        if (min < 10) {min = "0" + min;}
-        if (sec < 10) {sec = "0" + sec;}
-        this.time = `${hrs}:${min}:${sec}`
-      }
-    },
-    computed: {
-      filterData(){
-        let filterData
-        filterData = this.OpenData
-        if(this.filter != '全臺灣'){
-          filterData = this.OpenData.filter((obj)=>{
-            return obj.County == this.filter
-          })
+                prevSelect.classList.remove(this.selectClass)
+                nextSelect.classList.add(this.selectClass)
+
+                this.changeSelectHandler(data)
+                
+            },
+            changeSelectHandler(data) {
+                var $group = $('.quality-group'),
+                    vmThis = this
+
+                $('html, body').stop().animate({ scrollTop: 0 }, 500, function () {
+                    if (this.tagName === 'BODY') {
+                        $group.fadeOut(400, () => {
+                            vmThis.selectCounty = data
+                            $group.fadeIn(400)
+                        })
+                    }
+                })
+            },
+            // 固定 body
+            bodyLockHandler() {
+                var body = document.body;
+                var html = document.documentElement;
+                var distance = -(html.scrollTop + body.scrollTop)
+                var bodyTop = bodyTop = Math.abs(parseFloat(body.style.top))
+                if (this.bodyType) {
+                    this.bodyType = false
+                    body.removeAttribute('style')
+                    html.scrollTop = body.scrollTop = bodyTop
+                    return
+                }
+                this.bodyType = true
+                body.style.width =  `calc(100% - ${this.scrollBarWidth}px)`
+                body.style.top = distance + 'px'
+                body.style.position = 'fixed'
+            },
+            navOpenHandler() {
+                this.bodyLockHandler()
+                this.navType = this.bodyType
+            },
+            resizeHandler() {
+                if (window.innerWidth >= 767.98) {
+                    this.windowType = true
+                    if (this.bodyType) { this.bodyLockHandler() }
+                    return
+                }
+                if (this.navType && !this.bodyType) { this.bodyLockHandler() }
+                this.windowType = false
+            }
+        },
+        computed: {
+            filterData() {
+                if (!this.ready) return
+
+                var select, filterArray = new Array
+                filterArray = this.ajaxData
+                select = this.selectCounty
+
+                if (select) filterArray = filterArray.filter(obj => { return obj.County === select })
+                return filterArray
+            },
+            scrollBarWidth() {
+                return window.innerWidth - document.documentElement.clientWidth;
+            }
         }
-        return filterData
-      },
-      dataPrePagen(){return this.dataPrePage},
-      pageNum(){return this.pageNum},
-      totalPage(){
-        return  Math.ceil(this.filterData.length/this.dataPrePage)
-      }
-    },
-    beforeDestory(){
-      clearInterval(timer)
-    }
-  });
+    })
 
-
-})($,Vue)
+})()
