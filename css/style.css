@@ -1,354 +1,474 @@
 @charset "UTF-8";
-* {
-  font-family: 微軟正黑體;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box; }
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
 
-html, body {
-  min-height: 100%; }
-
-html {
-  height: 100vh; }
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
 
 body {
-  padding: 0;
-  margin: 0; }
+  line-height: 1;
+}
 
-[v-cloak] {
-  display: none; }
-
-a {
-  text-decoration: none; }
-
-h4 {
-  font-size: 5rem;
-  text-align: center; }
-
-ul {
+ol, ul {
   list-style: none;
-  padding: 0;
-  margin: 0; }
+}
 
-h1, h2 {
-  text-align: center;
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.header, .background-img {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.header--blur, .quality--blur, .background-img {
+  -webkit-filter: blur(5px);
+  filter: blur(5px);
+}
+
+.quality-AQI__num, .navButton {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: 微軟正黑體;
   color: white;
-  letter-spacing: 1px;
-  font-weight: 900; }
+}
 
-.filter {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 90vh;
-  z-index: -1; }
-  .filter .bgc_img {
-    -webkit-filter: blur(5px);
-            filter: blur(5px);
-    -webkit-transform: scale(1.5);
-        -ms-transform: scale(1.5);
-            transform: scale(1.5);
-    -webkit-transition: 0.7s;
-    -o-transition: 0.7s;
-    transition: 0.7s;
-    width: 100%;
-    height: 100%;
-    background-image: url(https://mini-ghost.github.io/images/cover.jpg);
-    background-position: center;
-    background-size: cover; }
-    @media (max-width: 768px) {
-      .filter .bgc_img {
-        -webkit-filter: blur(10px);
-                filter: blur(10px); } }
+.fz-52 {
+  font-size: 3.25rem;
+}
 
-.Time {
-  color: white;
-  font-weight: 700;
-  font-size: 15px;
-  text-align: center; }
-  @media (max-width: 768px) {
-    .Time {
-      font-size: 12px; } }
-  .Time .Today, .Time .nowtime {
-    display: inline; }
-  .Time .nowtime {
-    margin-left: 10px; }
+.fz-36 {
+  font-size: 2.25rem;
+}
 
-.content {
+.fz-24 {
+  font-size: 1.5rem;
+}
+
+.fz-14 {
+  font-size: 0.875rem;
+}
+
+.fz-12 {
+  font-size: 0.75rem;
+}
+
+.header {
+  padding: 5vw;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+}
+
+.header-title {
+  font-weight: bold;
+}
+
+.header-title__ch, .header-title__en {
+  margin: 1rem 0;
+}
+
+sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+main {
+  padding: 3vw 0;
+}
+
+.container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  position: relative;
-  padding: 20px 0; }
-  @media (max-width: 768px) {
-    .content {
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-          -ms-flex-direction: column;
-              flex-direction: column; } }
-  .content .CountyRadio {
-    -webkit-box-flex: 0;
-        -ms-flex: 0 1 20%;
-            flex: 0 1 20%; }
-    @media (max-width: 1024px) {
-      .content .CountyRadio {
-        -webkit-box-flex: 0;
-            -ms-flex: 0 1 30%;
-                flex: 0 1 30%; } }
-  .content ul {
-    -webkit-box-flex: 1;
-        -ms-flex: 1 1 80%;
-            flex: 1 1 80%; }
-    @media (max-width: 1024px) {
-      .content ul {
-        -webkit-box-flex: 0;
-            -ms-flex: 0 1 70%;
-                flex: 0 1 70%; } }
+  max-width: 95%;
+  width: 100%;
+  margin: 0 auto;
+}
 
-.CountyRadio {
-  margin-right: 10px; }
-  @media (max-width: 768px) {
-    .CountyRadio {
-      max-width: 90%;
-      min-width: 320px;
-      margin: 0 auto; } }
-  .CountyRadio .RadioBox {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 20px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    padding: 20px; }
-    @media (max-width: 768px) {
-      .CountyRadio .RadioBox {
-        position: relative;
-        margin-bottom: 10px; } }
-    .CountyRadio .RadioBox:hover {
-      background-color: rgba(255, 255, 255, 0.3); }
-  .CountyRadio h3 {
-    margin: 0;
-    color: white;
-    letter-spacing: 1px;
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); }
-    .CountyRadio h3 > p {
-      font-size: 13px;
-      margin: 5px 0; }
-  .CountyRadio .button-Box {
+.radio {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .radio {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: start;
-        -ms-flex-pack: start;
-            justify-content: flex-start;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-    margin: 20px 0; }
-    .CountyRadio .button-Box .button {
-      width: calc(33.33% - 4px);
-      height: 36px;
-      margin: 2px; }
-      @media (max-width: 768px) {
-        .CountyRadio .button-Box .button {
-          height: 40px; } }
-    .CountyRadio .button-Box input[name="CountyRadio"] {
-      display: none; }
-      .CountyRadio .button-Box input[name="CountyRadio"]:checked + label[name="CountyRadio"] {
-        background-color: rgba(255, 165, 0, 0.7); }
-    .CountyRadio .button-Box label[name="CountyRadio"] {
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center;
-      width: 100%;
-      height: 100%;
-      font-size: 15px;
-      font-weight: 900;
-      background-color: rgba(0, 0, 0, 0.6);
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none; }
-      .CountyRadio .button-Box label[name="CountyRadio"]:hover {
-        background-color: rgba(0, 0, 0, 0.8); }
+    flex-wrap: wrap;
+    margin: 5vw -5px;
+  }
+}
 
-ul.AQIBox {
-  max-width: 460px; }
-  @media (max-width: 768px) {
-    ul.AQIBox {
-      max-width: 90%;
-      min-width: 90%;
-      margin: 0 auto;
-      margin-top: 20px; } }
-  ul.AQIBox > li.AQIcard {
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    border-radius: 10px;
-    margin: 20px 0;
-    padding: 20px;
-    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.9); }
-    ul.AQIBox > li.AQIcard:nth-child(1) {
-      margin-top: 0; }
-    ul.AQIBox > li.AQIcard .County {
-      font-weight: bold; }
-    ul.AQIBox > li.AQIcard .District .SiteName {
-      font-size: 2.125rem;
-      font-weight: bold; }
-    ul.AQIBox > li.AQIcard .AQINum .AQI {
-      position: relative;
-      display: inline-block;
-      font-size: 3.25rem;
-      border: 2px solid white;
-      border-radius: 10px;
-      padding: 8px 15px;
-      margin: 10px 0 20px 0; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.Good {
-        color: #52b947; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.Moderate {
-        color: #f3ec19; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.UnhealthyForSensitiveGroups {
-        color: #f57e20; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.Unhealthy {
-        color: #ed1d24; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.VeryUnhealthy {
-        color: #7e2b7d; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.Hazardous {
-        color: #480d27; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI.stop {
-        color: #878787; }
-      ul.AQIBox > li.AQIcard .AQINum .AQI:before {
-        position: absolute;
-        content: "";
-        border-top: 8px solid white;
-        border-right: 8px solid transparent;
-        border-left: 8px solid transparent;
-        border-bottom: 8px solid transparent;
-        bottom: -17px;
-        left: 50%;
-        -webkit-transform: translate(-50%);
-            -ms-transform: translate(-50%);
-                transform: translate(-50%); }
-    ul.AQIBox > li.AQIcard .AQINum .Status {
-      font-weight: bold; }
-    ul.AQIBox > li.AQIcard .DataBox {
-      margin: 10px 0;
-      width: 100%; }
-      ul.AQIBox > li.AQIcard .DataBox .Item {
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: center;
-            -ms-flex-align: center;
-                align-items: center;
-        padding: 5px 5px 10px 5px;
-        border-radius: 5px; }
-        ul.AQIBox > li.AQIcard .DataBox .Item:hover {
-          background-color: rgba(255, 0, 0, 0.5); }
-        ul.AQIBox > li.AQIcard .DataBox .Item .DataName {
-          width: 85%;
-          font-size: 1.25rem;
-          font-weight: bold; }
-        ul.AQIBox > li.AQIcard .DataBox .Item .NumericalValue {
-          width: 15%;
-          text-align: right;
-          font-weight: bold;
-          font-size: 1rem; }
-          ul.AQIBox > li.AQIcard .DataBox .Item .NumericalValue .unit {
-            display: block;
-            font-size: 12px;
-            margin-left: 10px; }
-    ul.AQIBox > li.AQIcard .PublishTime {
-      text-align: right;
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.2);
-      -webkit-user-select: none;
-         -moz-user-select: none;
-          -ms-user-select: none;
-              user-select: none; }
+.radio-label {
+  width: calc(20% - 10px);
+  text-align: center;
+  display: block;
+  border: 1px solid #ffb733;
+  margin: 5px;
+  cursor: pointer;
+}
 
-.pageSelect ul.pages {
+@media (max-width: 419.98px) {
+  .radio-label {
+    width: calc(33.333% - 10px);
+  }
+}
+
+.radio-input {
+  display: none;
+}
+
+.radio-text {
+  padding: 2.5vw 0;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.radio-input:checked + .radio-text, .radio-text:hover {
+  background-color: #ffb733;
+  color: white;
+}
+
+.taiwan {
+  -ms-flex-preferred-size: 40%;
+  flex-basis: 40%;
+  font-size: 0;
+  -webkit-box-align: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+}
+
+@media (max-width: 1023.98px) {
+  .taiwan {
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 50%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .taiwan {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    padding: 3.75vw;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 999;
+    overflow: auto;
+  }
+}
+
+.taiwan-container {
+  width: 100%;
+  height: 100%;
+}
+
+.taiwan-content {
+  outline: 1px solid white;
+  background-color: rgba(114, 184, 255, 0.25);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px;
+}
+
+@media (max-width: 767.98px) {
+  .taiwan-content {
+    position: relative;
+    top: 0;
+  }
+}
+
+.taiwan-county {
+  fill: rgba(255, 255, 255, 0.25);
+  stroke: white;
+  -webkit-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.taiwan-county:hover {
+  fill: rgba(255, 165, 0, 0.5);
+}
+
+.taiwan-county.taiwan-county--active {
+  fill: orange;
+}
+
+@media (max-width: 767.98px) {
+  .taiwan--active {
+    display: block;
+  }
+}
+
+.quality {
+  -ms-flex-preferred-size: 60%;
+  flex-basis: 60%;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+}
+
+@media (max-width: 1023.98px) {
+  .quality {
+    -ms-flex-preferred-size: 50%;
+    flex-basis: 50%;
+  }
+}
+
+.quality-container {
+  width: 100%;
+}
+
+.quality-group {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center; }
-  .pageSelect ul.pages li.page {
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: -0.5vw 0;
+}
+
+.quality-group__item {
+  background-color: rgba(0, 0, 0, 0.8);
+  margin: 0.5vw;
+  -ms-flex-preferred-size: calc(50% - 2vw);
+  flex-basis: calc(50% - 2vw);
+  padding: 1.75vw;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+}
+
+@media (max-width: 1023.98px) {
+  .quality-group__item {
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .quality-group__item {
+    padding: 3vw;
+    margin: 1vw;
+  }
+}
+
+@media (max-width: 419.98px) {
+  .quality-group__item {
+    padding: 6vw;
+  }
+}
+
+.quality-AQI__title {
+  margin-top: 1.25rem;
+  font-weight: bold;
+}
+
+.quality-AQI__num {
+  position: relative;
+  display: inline-block;
+  border: 2px solid white;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  font-size: bold;
+  background-color: rgba(239, 239, 239, 0.1);
+}
+
+.quality-AQI__num--good {
+  color: #00E800;
+}
+
+.quality-AQI__num--moderate {
+  color: #FFFF00;
+}
+
+.quality-AQI__num--unhealthyForSensitiveGroups {
+  color: #FF7E00;
+}
+
+.quality-AQI__num--unhealthy {
+  color: #FF0000;
+}
+
+.quality-AQI__num--veryUnhealthy {
+  color: #7C0ECC;
+}
+
+.quality-AQI__num--null {
+  color: #afafaf;
+}
+
+.quality-AQI__num:after {
+  position: absolute;
+  content: "";
+  border-top: 8px solid white;
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  bottom: -17px;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+  -ms-transform: translate(-50%);
+  transform: translate(-50%);
+}
+
+.quality-content {
+  margin: 30px 0;
+}
+
+.quality-list__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.quality-list__item + .quality-list__item {
+  margin-top: 20px;
+}
+
+.quality-information, .quality-value {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+.quality-information {
+  -ms-flex-preferred-size: 85%;
+  flex-basis: 85%;
+}
+
+.quality-information:hover .quality-bar__percentage {
+  background-color: orange;
+}
+
+.quality-bar {
+  width: 100%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin-top: 10px;
+}
+
+.quality-bar__percentage {
+  height: 100%;
+  background-color: rgba(255, 165, 0, 0.5);
+  -webkit-transition: 0.5s 0.5s, background 0.5s;
+  -o-transition: 0.5s 0.5s, background 0.5s;
+  transition: 0.5s 0.5s, background 0.5s;
+}
+
+.quality-value {
+  -ms-flex-preferred-size: calc(15% - 10px);
+  flex-basis: calc(15% - 10px);
+  margin-left: 10px;
+  text-align: right;
+}
+
+.navButton {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .navButton {
+    position: fixed;
+    bottom: 5vw;
+    right: 5vw;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    background-color: rgba(0, 0, 0, 0.8);
+    -ms-flex-align: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid white;
     color: white;
-    width: 30px;
-    height: 30px;
-    font-size: 13px;
-    font-weight: 900;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-    cursor: pointer; }
-    .pageSelect ul.pages li.page:hover {
-      background-color: rgba(245, 126, 32, 0.6); }
-    .pageSelect ul.pages li.page:first-child {
-      border-radius: 5px 0 0 5px; }
-    .pageSelect ul.pages li.page:last-child {
-      border-radius: 0 5px 5px 0; }
-    .pageSelect ul.pages li.page.thisPage {
-      background-color: #f57e20; }
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 999;
+    cursor: pointer;
+    opacity: 0.5;
+  }
+  .navButton--active {
+    color: #ff0000;
+    background-color: rgba(114, 184, 255, 0.25);
+    opacity: 1;
+  }
+}
 
-.bar {
-  margin-top: 8px;
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 8px;
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 50px;
-  overflow: hidden; }
-  .bar .bar-value {
-    height: 100%;
-    width: 0;
-    background-color: #f57e20;
-    border-radius: 50px;
-    -webkit-transition: 0.5s;
-    -o-transition: 0.5s;
-    transition: 0.5s; }
+  height: 100%;
+  opacity: 0.9;
+  z-index: -9;
+}
 
-.footer {
-  height: 40px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  background-color: rgba(0, 0, 0, 0.8); }
-  .footer a {
-    color: white; }
-  .footer .icon {
-    margin-right: 5px; }
+.background-img {
+  width: 100%;
+  height: 100%;
+  -webkit-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+}

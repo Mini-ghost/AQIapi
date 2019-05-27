@@ -1,147 +1,97 @@
 <!DOCTYPE html>
-<html lang="zh-tw" >
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-  <title>臺灣空氣品質指標｜Air Quality Index</title>
-
-  <meta property="og:title" content="臺灣空氣品質指標｜Air Quality Index">
-  <meta property="og:site_name" content="臺灣空氣品質指標｜Air Quality Index">
-  <meta property="og:url" content="https://mini-ghost.github.io/AQIapi/">
-  
-  <link rel="stylesheet" href="css/style.css">
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-130590667-1');
-  </script>
-  
-</head>
-
-<body>
-    <div id="app" v-cloak="v-cloak">
-      <header class="header">
-        <h2>Air Quality Index</h2>
-        <h1>臺灣空氣品質指標（AQI）</h1>
-        <div class="Time"> 
-          <div class="Today">{{today}}</div>
-          <div class="nowtime">{{time}}</div>
-        </div>
+<html lang="zh-tw">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>臺灣空氣品質指標｜Air Quality Index</title>
+    <meta property="og:title" content="臺灣空氣品質指標｜Air Quality Index"/>
+    <meta property="og:site_name" content="臺灣空氣品質指標｜Air Quality Index"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-130590667-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-130590667-1');
+      
+    </script>
+  </head>
+  <body>
+    <div id="app">
+      <header class="header" :class="(navType &amp;&amp; !windowType)? 'header--blur' : ''" style="background-image: url(image/banner__01.jpg)">
+        <h1 class="header-title"> 
+          <div class="header-title__ch fz-36">臺灣空氣品質指標</div>
+          <div class="header-title__en fz-24">Air Quality Index</div>
+        </h1>
       </header>
-      <main class="content">
-        <div class="CountyRadio">
-          <div class="RadioBox">
-            <h3>區域選擇
-              <p>{{filter}} 共有 {{filterData.length}} 個監測站</p>
-            </h3>
-            <div class="button-Box">
-              <div class="button">
-                <input type="radio" name="CountyRadio" id="CountyData" checked="checked"/>
-                <label for="CountyData" name="CountyRadio" @click="ClickCountyRadio('全臺灣')">全臺灣</label>
-              </div>
-              <div class="button" v-for="CountyData in County">
-                <input type="radio" name="CountyRadio" :id="CountyData"/>
-                <label :for="CountyData" name="CountyRadio" @click="ClickCountyRadio(CountyData)">{{CountyData}}</label>
+      <main>
+        <div class="container">
+          <nav class="taiwan" :class="(navType &amp;&amp; !windowType)? 'taiwan--active' : ''">
+            <div class="taiwan-container">
+              <div class="taiwan-content" @click="countyClickHandler($event)"></div>
+              <div class="taiwan-selected">
+                <div class="taiwan-radio">
+                  <div class="radio">
+                    <label class="radio-label" v-for="county in county">
+                      <input class="radio-input" type="radio" name="county" :checked="county.COUNTYNAME === selectCounty"/>
+                      <div class="radio-text fz-14" @click="radioClickHandler(county.COUNTYNAME)">{{county.COUNTYNAME}}</div>
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </nav>
+          <section class="quality" :class="(navType &amp;&amp; !windowType)? 'quality--blur' : ''">
+            <div class="quality-container">
+              <ul class="quality-group">
+                <li class="quality-group__item" v-for="quality in filterData"> 
+                  <quality v-bind:air-data="quality"></quality>
+                </li>
+              </ul>
+            </div>
+          </section>
         </div>
-        <ul class="AQIBox">
-          <li class="AQIcard" v-for="(OpenData,index) in filterData" v-if="index &lt; dataPrePage*pageNum &amp;&amp; index &gt;= dataPrePage*(pageNum-1)">
-            <div class="District">
-              <div class="County">{{OpenData.County}}</div>
-              <div class="SiteName">{{OpenData.SiteName}}</div>
-            </div>
-            <div class="AQINum">
-              <div class="AQI" :class="OpenData.aqiClass">{{OpenData.AQI || '市長的腦袋'}}</div>
-              <div class="Status">{{OpenData.Status}}</div>
-            </div>
-            <div class="DataBox">
-              <div class="Item PM25">
-                <div class="DataName">PM2.5
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData['PM2.5']/aqiMax['PM2.5']*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData['PM2.5']}}
-                  <div class="unit">μg/m<sup>3</sup></div>
-                </div>
-              </div>
-              <div class="Item PM10">
-                <div class="DataName">PM10
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData.PM10/aqiMax.PM10*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData.PM10}}
-                  <div class="unit">μg/m<sup>3</sup></div>
-                </div>
-              </div>
-              <div class="Item SO2">
-                <div class="DataName">SO<sub>2</sub>
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData.SO2/aqiMax.SO2*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData.SO2}}
-                  <div class="unit">ppb</div>
-                </div>
-              </div>
-              <div class="Item CO">
-                <div class="DataName">CO 
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData.CO/aqiMax.CO*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData.CO}}
-                  <div class="unit">ppm</div>
-                </div>
-              </div>
-              <div class="Item O3">
-                <div class="DataName">O<sub>3</sub>
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData.O3/aqiMax.O3*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData.O3}}
-                  <div class="unit">ppb</div>
-                </div>
-              </div>
-              <div class="Item NO">
-                <div class="DataName">NO<sub>2 </sub>
-                  <div class="bar">
-                    <div class="bar-value" :style="'width:'+ OpenData.NO2/aqiMax.NO2*100 +'%'"></div>
-                  </div>
-                </div>
-                <div class="NumericalValue">{{OpenData.NO2}}
-                  <div class="unit">ppb</div>
-                </div>
-              </div>
-            </div>
-            <div class="PublishTime">資料更新時間：{{OpenData.PublishTime}}</div>
-          </li>
-          <div class="pageSelect" v-if="totalPage &gt;= 2 ">
-            <ul class="pages">
-              <li class="page" v-for="page in totalPage" @click="pageSelect(page)" :class="(pageNum == page)? 'thisPage':''">{{page}}</li>
-            </ul>
-          </div>
-        </ul>
       </main>
-      <footer class="footer"><a href="https://github.com/Mini-ghost/AQIapi"><span class="icon fab fa-github"></span><span>GitHub</span></a></footer>
+      <footer></footer>
+      <div class="navButton" :class="(navType &amp;&amp; !windowType)? 'navButton--active' : ''" @click="navOpenHandler"><i class="fas fa-map-marker-alt"></i></div>
+      <div class="background">
+        <div class="background-img" style="background-image: url(image/banner__01.jpg)"></div>
+      </div>
     </div>
-    <!-- 背景-->
-    <div class="filter">
-      <div class="bgc_img"></div>
-    </div>
+    <template id="quality">
+      <div class="quality-col">
+        <header class="quality-header">
+          <h2 class="fz-24">{{airData.County}} {{airData.SiteName}}</h2>
+          <div class="quality-AQI">
+            <div class="quality-AQI__title">AQI</div>
+            <div class="quality-AQI__num fz-52" :class="'quality-AQI__num' + airData.AQIStatus.class">{{airData.AQI || 'null'}}</div>
+            <div class="quality-AQI__status">空氣品質指標：{{airData.AQIStatus.text}}</div>
+          </div>
+        </header>
+        <div class="quality-content">
+          <ul class="quality-list">
+            <li class="quality-list__item" v-for="pollution in airData.Index">
+              <div class="quality-information">
+                <div class="quality-information__title fz-14"> <span>{{pollution.name}} </span><span v-html="pollution.chemical"></span></div>
+                <div class="quality-bar"> 
+                  <div class="quality-bar__percentage" v-bind:style="'width: ' + pollution.value/pollution.max*100 + '%;' "></div>
+                </div>
+              </div>
+              <div class="quality-value">
+                <div class="quality-value__num">{{pollution.value}}</div>
+                <div class="quality-value__unit fz-12">{{pollution.unit}}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </template>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js"></script>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="https://d3js.org/topojson.v1.js"></script>
     <script src="js/index.js"></script>
   </body>
-
 </html>
