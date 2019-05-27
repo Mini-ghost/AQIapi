@@ -55,6 +55,9 @@
         </div>
       </main>
       <footer></footer>
+      <div class="goTop" @click="windowAnimateHandler()">
+        <div class="fas fa-arrow-up"></div>
+      </div>
       <div class="navButton" :class="(navType &amp;&amp; !windowType)? 'navButton--active' : ''" @click="navOpenHandler"><i class="fas fa-map-marker-alt"></i></div>
       <div class="background">
         <div class="background-img" style="background-image: url(image/banner__01.jpg)"></div>
@@ -76,7 +79,7 @@
               <div class="quality-information">
                 <div class="quality-information__title fz-14"> <span>{{pollution.name}} </span><span v-html="pollution.chemical"></span></div>
                 <div class="quality-bar"> 
-                  <div class="quality-bar__percentage" v-bind:style="'width: ' + pollution.value/pollution.max*100 + '%;' "></div>
+                  <div class="quality-bar__percentage" :style="'width: ' + (pollution.value/pollution.max)*100 + '%;' "></div>
                 </div>
               </div>
               <div class="quality-value">

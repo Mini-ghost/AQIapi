@@ -50,12 +50,12 @@
                     AQI: obj['AQI'],
                     AQIStatus: this.statusHandler(obj['AQI']),
                     Index: [
-                        { name: '細懸浮微粒', key: 'PM25', chemical: 'PM2.5', unit: 'μg/m³', value: obj['PM2.5'], max: 350.4},
-                        { name: '懸浮微粒', key: 'PM10', chemical: 'PM10', unit: 'μg/m³', value: obj['PM10'], max: 504},
-                        { name: '二氧化硫', key: 'SO2', chemical: 'SO<sub>2</sub>', unit: 'ppb', value: obj['SO2'], max: 804},
-                        { name: '一氧化碳', key: 'CO', chemical: 'CO', unit: 'ppm', value: obj['CO'], max: 40.4},
-                        { name: '臭氧', key: 'O3', chemical: 'O<sub>3</sub>', unit: 'ppb', value: obj['O3'], max: 504},
-                        { name: '二氧化氮', key: 'NO2', chemical: 'NO<sub>2</sub>', unit: 'ppb', value: obj['NO2'], max: 1649}
+                        { name: '細懸浮微粒', key: 'PM25', chemical: 'PM2.5', unit: 'μg/m³', value: obj['PM2.5'] || 'null', max: 350.4},
+                        { name: '懸浮微粒', key: 'PM10', chemical: 'PM10', unit: 'μg/m³', value: obj['PM10'] || 'null', max: 504 },
+                        { name: '二氧化硫', key: 'SO2', chemical: 'SO<sub>2</sub>', unit: 'ppb', value: obj['SO2'] || 'null', max: 804},
+                        { name: '一氧化碳', key: 'CO', chemical: 'CO', unit: 'ppm', value: obj['CO'] || 'null', max: 40.4},
+                        { name: '臭氧', key: 'O3', chemical: 'O<sub>3</sub>', unit: 'ppb', value: obj['O3'] || 'null', max: 504},
+                        { name: '二氧化氮', key: 'NO2', chemical: 'NO<sub>2</sub>', unit: 'ppb', value: obj['NO2'] || 'null', max: 1649}
                     ],
                 }))
                 this.loadingTime = new Date
@@ -134,15 +134,19 @@
                 
             },
             changeSelectHandler(data) {
-                var $group = $('.quality-group'),
-                    vmThis = this
-
+                var $group = $('.quality-group')
+                this.windowAnimateHandler(() => {
+                    $group.fadeOut(400, () => {
+                        this.selectCounty = data
+                        $group.fadeIn(400)
+                    })
+                })
+            },
+            windowAnimateHandler(callback) {
                 $('html, body').stop().animate({ scrollTop: 0 }, 500, function () {
+                    if(!callback) return
                     if (this.tagName === 'BODY') {
-                        $group.fadeOut(400, () => {
-                            vmThis.selectCounty = data
-                            $group.fadeIn(400)
-                        })
+                        callback()
                     }
                 })
             },
