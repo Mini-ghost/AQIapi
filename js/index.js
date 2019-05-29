@@ -57,8 +57,9 @@
                         { name: '臭氧', key: 'O3', chemical: 'O<sub>3</sub>', unit: 'ppb', value: obj['O3'] || 'null', max: 504},
                         { name: '二氧化氮', key: 'NO2', chemical: 'NO<sub>2</sub>', unit: 'ppb', value: obj['NO2'] || 'null', max: 1649}
                     ],
+                    PublishTime: obj['PublishTime']
                 }))
-                this.loadingTime = new Date
+                this.loadingTime = new Date()
                 this.ready = true
             },
             statusHandler(data) {
@@ -104,22 +105,22 @@
             // 地圖點選
             countyClickHandler(e) {
                 var target = e.target
-                if (target.nodeName === 'path') {
-                    var vmThis = this,
-                        data = target.dataset.countyCh,  
-                        $group = $('.quality-group')
-                    var targetSiblings = Array.prototype.filter.call(target.parentNode.children, (child) => {
-                        return child !== target
-                    })
-                    targetSiblings.forEach(obj => {
-                        if (obj.classList.contains(this.selectClass)) {
-                            obj.classList.remove(this.selectClass)
-                            return
-                        }
-                    })
-                    target.classList.add(this.selectClass)
-                    this.changeSelectHandler(data)
-                }
+                if (target.nodeName !== 'path') return
+                if (target.classList.contains(this.selectClass)) return
+
+                var target = e.target
+                var data = target.dataset.countyCh;
+                var targetSiblings = Array.prototype.filter.call(target.parentNode.children, (child) => {
+                    return child !== target
+                })
+                targetSiblings.forEach(obj => {
+                    if (obj.classList.contains(this.selectClass)) {
+                        obj.classList.remove(this.selectClass)
+                        return
+                    }
+                })
+                target.classList.add(this.selectClass)
+                this.changeSelectHandler(data)
             },
             radioClickHandler(data) {
                 var prevSelect, nextSelect
